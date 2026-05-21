@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { createUser } from "../controllers/user-controller.js";
+import {
+  createUser,
+  refreshToken,
+  signIn,
+} from "../controllers/user-controller.js";
 import handleRequestParamValidationErrors from "../middleware/handle-validation-errors-middleware.js";
 import { RESPONSE_MESSAGES } from "../constants/response-messages.js";
 import {
@@ -16,6 +20,13 @@ userRoutes.post(
   createUser,
 );
 
-// userRoutes.post("/sign-in", userSignInValidationRules, signIn);
+userRoutes.post(
+  "/sign-in",
+  userSignInValidationRules,
+  handleRequestParamValidationErrors(RESPONSE_MESSAGES.USER_LOGIN_FAILED),
+  signIn,
+);
+
+userRoutes.post("/refresh-token", [], refreshToken);
 
 export default userRoutes;
