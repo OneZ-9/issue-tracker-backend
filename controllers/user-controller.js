@@ -132,12 +132,13 @@ export const refreshToken = async (req, res) => {
 
     const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET);
 
-    const user = await User.findById(decoded.userId);
-    if (!user) {
+    const user = await User.findById(decoded.userId).select("-password").lean();
+
+    if (!user || !user.isActive) {
       return handleError({
         res,
         metaData: RESPONSE_MESSAGES.USER_NOT_FOUND,
-        error: new Error("User not found"),
+        error: new Error("User not found or deactivated"),
       });
     }
 
