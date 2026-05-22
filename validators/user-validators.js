@@ -16,7 +16,15 @@ export const createUserValidationRules = [
     .withMessage("Invalid email address"),
   body("password")
     .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters long"),
+    .withMessage("Password must be at least 8 characters long")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain at least one lowercase letter")
+    .matches(/[0-9]/)
+    .withMessage("Password must contain at least one number")
+    .matches(/[^a-zA-Z0-9]/)
+    .withMessage("Password must contain at least one special character"),
   body("role")
     .optional()
     .isIn(Object.values(USER_ROLES))
@@ -39,8 +47,8 @@ export const userSignInValidationRules = [
     .isEmail()
     .withMessage("Invalid email address"),
   body("password")
-    .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters long"),
+    .notEmpty()
+    .withMessage("Password is required"),
 ];
 
 export const userUpdateValidationRules = [
@@ -64,7 +72,15 @@ export const userUpdateValidationRules = [
 export const userResetPasswordValidationRules = [
   body("password")
     .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters long"),
+    .withMessage("Password must be at least 8 characters long")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain at least one lowercase letter")
+    .matches(/[0-9]/)
+    .withMessage("Password must contain at least one number")
+    .matches(/[^a-zA-Z0-9]/)
+    .withMessage("Password must contain at least one special character"),
   body("otp")
     .notEmpty()
     .withMessage("OTP is required")
