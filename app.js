@@ -12,6 +12,8 @@ import {
 } from "./constants/shared-constants.js";
 import userRoutes from "./routes/user-routes.js";
 import otpRoutes from "./routes/otp-routes.js";
+import spaceRoutes from "./routes/space-routes.js";
+import ticketRoutes from "./routes/ticket-routes.js";
 
 const app = express();
 app.use(express.json());
@@ -32,6 +34,8 @@ app.get("/", (req, res) => {
 // ROUTES
 app.use(`${API_BASE_URL}/users`, userRoutes);
 app.use(`${API_BASE_URL}/otp`, otpRoutes);
+app.use(`${API_BASE_URL}/spaces`, spaceRoutes);
+app.use(`${API_BASE_URL}/spaces/:spaceId/tickets`, ticketRoutes);
 
 mongoose
   .connect(MONGODB_URL)

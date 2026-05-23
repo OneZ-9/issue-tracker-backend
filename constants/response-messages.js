@@ -101,61 +101,61 @@ export const RESPONSE_MESSAGES = {
     MESSAGE: "User refresh token failed",
   },
 
-  // project-related messages
-  PROJECT_CREATED: {
+  // space-related messages
+  SPACE_CREATED: {
     RESPONSE_CODE: STATUS_CODE.CREATED,
     STATUS: STATUS_MESSAGE.CREATED,
-    MESSAGE: "Project created successfully",
+    MESSAGE: "Space created successfully",
   },
-  PROJECT_CREATION_FAILED: {
+  SPACE_CREATION_FAILED: {
     RESPONSE_CODE: STATUS_CODE.FAILED,
     STATUS: STATUS_MESSAGE.FAILED,
-    MESSAGE: "Project creation failed",
+    MESSAGE: "Space creation failed",
   },
-  PROJECT_NOT_FOUND: {
+  SPACE_NOT_FOUND: {
     RESPONSE_CODE: STATUS_CODE.NOT_FOUND,
     STATUS: STATUS_MESSAGE.NOT_FOUND,
-    MESSAGE: "Project not found",
+    MESSAGE: "Space not found",
   },
-  PROJECT_FETCH_SUCCESS: {
+  SPACE_FETCH_SUCCESS: {
     RESPONSE_CODE: STATUS_CODE.SUCCESS,
     STATUS: STATUS_MESSAGE.SUCCESS,
-    MESSAGE: "Project fetched successfully",
+    MESSAGE: "Space fetched successfully",
   },
-  PROJECT_FETCH_FAILED: {
+  SPACE_FETCH_FAILED: {
     RESPONSE_CODE: STATUS_CODE.FAILED,
     STATUS: STATUS_MESSAGE.FAILED,
-    MESSAGE: "Project fetch failed",
+    MESSAGE: "Space fetch failed",
   },
-  PROJECTS_FETCH_SUCCESS: {
+  SPACES_FETCH_SUCCESS: {
     RESPONSE_CODE: STATUS_CODE.SUCCESS,
     STATUS: STATUS_MESSAGE.SUCCESS,
-    MESSAGE: "Projects fetched successfully",
+    MESSAGE: "Spaces fetched successfully",
   },
-  PROJECTS_FETCH_FAILED: {
+  SPACES_FETCH_FAILED: {
     RESPONSE_CODE: STATUS_CODE.FAILED,
     STATUS: STATUS_MESSAGE.FAILED,
-    MESSAGE: "Projects fetch failed",
+    MESSAGE: "Spaces fetch failed",
   },
-  PROJECT_UPDATE_SUCCESS: {
+  SPACE_UPDATE_SUCCESS: {
     RESPONSE_CODE: STATUS_CODE.SUCCESS,
     STATUS: STATUS_MESSAGE.SUCCESS,
-    MESSAGE: "Project updated successfully",
+    MESSAGE: "Space updated successfully",
   },
-  PROJECT_UPDATE_FAILED: {
+  SPACE_UPDATE_FAILED: {
     RESPONSE_CODE: STATUS_CODE.FAILED,
     STATUS: STATUS_MESSAGE.FAILED,
-    MESSAGE: "Project update failed",
+    MESSAGE: "Space update failed",
   },
-  PROJECT_DELETION_SUCCESS: {
+  SPACE_DELETION_SUCCESS: {
     RESPONSE_CODE: STATUS_CODE.SUCCESS,
     STATUS: STATUS_MESSAGE.SUCCESS,
-    MESSAGE: "Project deleted successfully",
+    MESSAGE: "Space deleted successfully",
   },
-  PROJECT_DELETION_FAILED: {
+  SPACE_DELETION_FAILED: {
     RESPONSE_CODE: STATUS_CODE.FAILED,
     STATUS: STATUS_MESSAGE.FAILED,
-    MESSAGE: "Project deletion failed",
+    MESSAGE: "Space deletion failed",
   },
 
   // ticket-related messages
