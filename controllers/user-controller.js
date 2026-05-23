@@ -12,7 +12,7 @@ import handleResponse from "../utils/handle-response.js";
 
 const generateAccessToken = (user) => {
   const token = jwt.sign({ userId: user._id }, SERVER_SECRET, {
-    expiresIn: "1d",
+    expiresIn: "1h", // Access token expiration
   });
   return token;
 };
