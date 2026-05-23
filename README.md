@@ -144,6 +144,8 @@ Authorization: Bearer <access_token>
 }
 ```
 
+Note: `name` is required when creating a user.
+
 **Sign In — `POST /users/sign-in`**
 
 ```json
