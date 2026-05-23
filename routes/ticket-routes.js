@@ -15,6 +15,7 @@ import { RESPONSE_MESSAGES } from "../constants/response-messages.js";
 import {
   createTicketValidationRules,
   listTicketsQueryValidationRules,
+  exportTicketsValidationRules,
   updateTicketStatusValidationRules,
   updateTicketValidationRules,
 } from "../validators/ticket-validators.js";
@@ -26,7 +27,12 @@ const ticketRoutes = Router({ mergeParams: true });
 ticketRoutes.use(verifyToken);
 
 ticketRoutes.get("/stats", getTicketStats);
-ticketRoutes.get("/export", exportTickets);
+ticketRoutes.get(
+  "/export",
+  exportTicketsValidationRules,
+  handleRequestParamValidationErrors(RESPONSE_MESSAGES.TICKETS_FETCH_FAILED),
+  exportTickets,
+);
 
 ticketRoutes.post(
   "/",
