@@ -197,13 +197,13 @@ OTPs expire after **5 minutes** and are consumed on use.
 
 ### Spaces
 
-| Method   | Path         | Auth        | Description                    |
-| -------- | ------------ | ----------- | ------------------------------ |
-| `POST`   | `/spaces`    | Yes         | Create a new space             |
-| `GET`    | `/spaces`    | Yes         | List all active spaces         |
-| `GET`    | `/spaces/:id` | Yes        | Get a single space             |
-| `PUT`    | `/spaces/:id` | Yes (owner) | Update space name/description  |
-| `DELETE` | `/spaces/:id` | Yes (owner) | Soft-delete a space            |
+| Method   | Path          | Auth        | Description                   |
+| -------- | ------------- | ----------- | ----------------------------- |
+| `POST`   | `/spaces`     | Yes         | Create a new space            |
+| `GET`    | `/spaces`     | Yes         | List all active spaces        |
+| `GET`    | `/spaces/:id` | Yes         | Get a single space            |
+| `PATCH`  | `/spaces/:id` | Yes (owner) | Update space name/description |
+| `DELETE` | `/spaces/:id` | Yes (owner) | Soft-delete a space           |
 
 **Create Space — `POST /spaces`**
 
@@ -222,16 +222,16 @@ Response includes the auto-generated `spaceKey` (e.g. `"SA"`).
 
 All ticket routes are nested under a space: `/spaces/:spaceId/tickets`
 
-| Method   | Path                                          | Auth | Description                             |
-| -------- | --------------------------------------------- | ---- | --------------------------------------- |
-| `GET`    | `/spaces/:spaceId/tickets/stats`              | Yes  | Count tickets by status                 |
-| `GET`    | `/spaces/:spaceId/tickets/export`             | Yes  | Export tickets as CSV or JSON           |
-| `POST`   | `/spaces/:spaceId/tickets`                    | Yes  | Create a ticket                         |
-| `GET`    | `/spaces/:spaceId/tickets`                    | Yes  | List tickets (filter, search, paginate) |
-| `GET`    | `/spaces/:spaceId/tickets/:ticketId`          | Yes  | Get ticket details (e.g. `SA-1`)        |
-| `PUT`    | `/spaces/:spaceId/tickets/:ticketId`          | Yes  | Update ticket fields                    |
-| `PATCH`  | `/spaces/:spaceId/tickets/:ticketId/status`   | Yes  | Transition ticket status                |
-| `DELETE` | `/spaces/:spaceId/tickets/:ticketId`          | Yes  | Soft-delete a ticket                    |
+| Method   | Path                                        | Auth | Description                             |
+| -------- | ------------------------------------------- | ---- | --------------------------------------- |
+| `GET`    | `/spaces/:spaceId/tickets/stats`            | Yes  | Count tickets by status                 |
+| `GET`    | `/spaces/:spaceId/tickets/export`           | Yes  | Export tickets as CSV or JSON           |
+| `POST`   | `/spaces/:spaceId/tickets`                  | Yes  | Create a ticket                         |
+| `GET`    | `/spaces/:spaceId/tickets`                  | Yes  | List tickets (filter, search, paginate) |
+| `GET`    | `/spaces/:spaceId/tickets/:ticketId`        | Yes  | Get ticket details (e.g. `SA-1`)        |
+| `PATCH`  | `/spaces/:spaceId/tickets/:ticketId`        | Yes  | Update ticket fields                    |
+| `PATCH`  | `/spaces/:spaceId/tickets/:ticketId/status` | Yes  | Transition ticket status                |
+| `DELETE` | `/spaces/:spaceId/tickets/:ticketId`        | Yes  | Soft-delete a ticket                    |
 
 **Create Ticket — `POST /spaces/:spaceId/tickets`**
 
@@ -252,17 +252,17 @@ Defaults: `priority = medium`, `severity = medium`
 
 All query parameters are optional:
 
-| Parameter    | Type    | Description                                                |
-| ------------ | ------- | ---------------------------------------------------------- |
-| `page`       | integer | Page number (default: 1)                                   |
-| `limit`      | integer | Results per page, max 100 (default: 20)                    |
-| `search`     | string  | Full-text search on title and description                  |
-| `status`     | string  | Filter: `open`, `in_progress`, `resolved`                  |
-| `priority`   | string  | Filter: `low`, `medium`, `high`, `critical`                |
-| `severity`   | string  | Filter: `low`, `medium`, `high`, `critical`                |
-| `assignee`   | string  | Filter by assignee's MongoDB ObjectId                      |
-| `sortBy`     | string  | `ticketId` (default), `priority`, `createdAt`, `updatedAt` |
-| `sortOrder`  | string  | `asc` (default) or `desc`                                  |
+| Parameter   | Type    | Description                                                |
+| ----------- | ------- | ---------------------------------------------------------- |
+| `page`      | integer | Page number (default: 1)                                   |
+| `limit`     | integer | Results per page, max 100 (default: 20)                    |
+| `search`    | string  | Full-text search on title and description                  |
+| `status`    | string  | Filter: `open`, `in_progress`, `resolved`                  |
+| `priority`  | string  | Filter: `low`, `medium`, `high`, `critical`                |
+| `severity`  | string  | Filter: `low`, `medium`, `high`, `critical`                |
+| `assignee`  | string  | Filter by assignee's MongoDB ObjectId                      |
+| `sortBy`    | string  | `ticketId` (default), `priority`, `createdAt`, `updatedAt` |
+| `sortOrder` | string  | `asc` (default) or `desc`                                  |
 
 > **Performance tip:** Debounce the `search` parameter on the frontend (300–500ms) to avoid unnecessary API calls during typing.
 
