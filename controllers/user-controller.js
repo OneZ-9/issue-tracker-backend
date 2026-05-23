@@ -80,4 +80,81 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const signIn = async (req, res) => {};
+export const signIn = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return handleError({
+        res,
+        metaData: RESPONSE_MESSAGES.USER_NOT_FOUND,
+        error: new Error("Username or password is incorrect"),
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return handleError({
+        res,
+        metaData: RESPONSE_MESSAGES.USER_LOGIN_FAILED,
+        error: new Error("Username or password is incorrect"),
+      });
+    }
+
+    const token = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    return handleResponse({
+      res,
+      metaData: RESPONSE_MESSAGES.USER_LOGIN_SUCCESS,
+      data: { ...user._doc, password: undefined, token, refreshToken },
+    });
+  } catch (error) {
+    return handleError({
+      res,
+      metaData: RESPONSE_MESSAGES.USER_LOGIN_FAILED,
+      error,
+    });
+  }
+};
+
+export const refreshToken = async (req, res) => {
+  try {
+    let token = req.header("Refresh-Token");
+    if (!token) {
+      return handleError({
+        res,
+        metaData: RESPONSE_MESSAGES.UNAUTHORIZED,
+        error: new Error("No refresh token provided"),
+      });
+    }
+
+    const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET);
+
+    const user = await User.findById(decoded.userId).select("-password").lean();
+
+    if (!user || !user.isActive) {
+      return handleError({
+        res,
+        metaData: RESPONSE_MESSAGES.USER_NOT_FOUND,
+        error: new Error("User not found or deactivated"),
+      });
+    }
+
+    const newToken = generateAccessToken(user);
+    const newRefreshToken = generateRefreshToken(user);
+
+    return handleResponse({
+      res,
+      metaData: RESPONSE_MESSAGES.USER_REFRESH_TOKEN_SUCCESS,
+      data: { token: newToken, refreshToken: newRefreshToken },
+    });
+  } catch (error) {
+    return handleError({
+      res,
+      metaData: RESPONSE_MESSAGES.USER_REFRESH_TOKEN_FAILED,
+      error,
+    });
+  }
+};

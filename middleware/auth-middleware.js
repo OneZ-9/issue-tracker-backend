@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user-model";
+import User from "../models/user-model.js";
 import handleError from "../utils/handle-error.js";
 import { SERVER_SECRET } from "../constants/shared-constants.js";
 import { RESPONSE_MESSAGES } from "../constants/response-messages.js";
@@ -51,3 +51,5 @@ const verifyToken = async (req, res, next) => {
     });
   }
 };
+
+export default verifyToken;

@@ -3,7 +3,7 @@ import handleError from "../utils/handle-error.js";
 
 const authorize = (...allowedRoles) => {
   return (req, res, next) => {
-    if (req.userId && allowedRoles.includes(req.role)) {
+    if (req.userId && allowedRoles.includes(req.userRole)) {
       return next();
     }
     return handleError({
