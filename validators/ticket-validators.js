@@ -109,6 +109,7 @@ export const listTicketsQueryValidationRules = [
     .withMessage(
       `Severity must be one of: ${Object.values(TICKET_SEVERITY).join(", ")}`,
     ),
+  query("assignee").optional().isMongoId().withMessage("Invalid assignee ID"),
   query("sortBy")
     .optional()
     .isIn(["ticketId", "priority", "createdAt", "updatedAt"])
@@ -119,4 +120,14 @@ export const listTicketsQueryValidationRules = [
     .optional()
     .isIn(["asc", "desc"])
     .withMessage("sortOrder must be asc or desc"),
+];
+
+export const exportTicketsValidationRules = [
+  // Reuse the list query validators for filters and pagination-like params
+  ...listTicketsQueryValidationRules,
+  // Export-specific param: format can be json or csv
+  query("format")
+    .optional()
+    .isIn(["json", "csv"])
+    .withMessage("format must be 'json' or 'csv'"),
 ];

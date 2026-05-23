@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { RESPONSE_MESSAGES } from "../constants/response-messages.js";
 import {
   PRIORITY_ORDER,
+  TICKET_PRIORITY,
+  TICKET_SEVERITY,
   TICKET_STATUS,
   VALID_STATUS_TRANSITIONS,
 } from "../constants/ticket-constants.js";
@@ -66,8 +68,8 @@ export const createTicket = async (req, res) => {
       space: spaceId,
       title,
       description: description || "",
-      priority: priority || "medium",
-      severity: severity || "medium",
+      priority: priority || TICKET_PRIORITY.MEDIUM,
+      severity: severity || TICKET_SEVERITY.MEDIUM,
       assignee: assignee || null,
       reporter: req.userId,
     });
