@@ -1,6 +1,8 @@
 import { Router } from "express";
 import {
   createUser,
+  getAllUsers,
+  getUserById,
   refreshToken,
   signIn,
 } from "../controllers/user-controller.js";
@@ -28,5 +30,9 @@ userRoutes.post(
 );
 
 userRoutes.post("/refresh-token", [], refreshToken);
+
+userRoutes.get("/", getAllUsers);
+
+userRoutes.get("/:id", getUserById);
 
 export default userRoutes;
