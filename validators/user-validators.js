@@ -3,7 +3,8 @@ import { USER_ROLES } from "../constants/user-roles.js";
 
 export const createUserValidationRules = [
   body("name")
-    .optional()
+    .notEmpty()
+    .withMessage("Name is required")
     .isString()
     .withMessage("Name must be a string")
     .isLength({ min: 2, max: 50 })

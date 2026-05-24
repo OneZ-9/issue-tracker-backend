@@ -55,7 +55,7 @@ export const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
-      name: name || "",
+      name,
       email,
       password: hashedPassword,
       role,
@@ -154,6 +154,42 @@ export const refreshToken = async (req, res) => {
     return handleError({
       res,
       metaData: RESPONSE_MESSAGES.USER_REFRESH_TOKEN_FAILED,
+      error,
+    });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({ isActive: true })
+      .select("-password")
+      .lean();
+    return handleResponse({
+      res,
+      metaData: RESPONSE_MESSAGES.USERS_FETCH_SUCCESS,
+      data: users,
+    });
+  } catch (error) {
+    return handleError({
+      res,
+      metaData: RESPONSE_MESSAGES.USERS_FETCH_FAILED,
+      error,
+    });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password").lean();
+    return handleResponse({
+      res,
+      metaData: RESPONSE_MESSAGES.USER_FETCH_SUCCESS,
+      data: user,
+    });
+  } catch (error) {
+    return handleError({
+      res,
+      metaData: RESPONSE_MESSAGES.USER_FETCH_FAILED,
       error,
     });
   }

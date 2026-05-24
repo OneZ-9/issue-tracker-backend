@@ -70,9 +70,6 @@ const ticketSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// Full-text search on title and description
-ticketSchema.index({ title: "text", description: "text" });
-
 // Compound indexes for the most common query patterns
 ticketSchema.index({ space: 1, isDeleted: 1, ticketNum: 1 });
 ticketSchema.index({ space: 1, status: 1, isDeleted: 1 });
