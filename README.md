@@ -27,7 +27,7 @@ A RESTful API backend for a JIRA-inspired issue tracking application. Built with
 - **Spaces** — Create, read, update, and soft-delete spaces. Each space gets an auto-generated key (e.g. `SA` from "Sample App") used as a prefix for ticket IDs
 - **Tickets** — Full CRUD with unique sequential IDs (`SA-1`, `SA-2`, …) that are never recycled after soft delete
 - **Status transitions** — Enforced workflow: `open → in_progress → resolved`, with reopen support
-- **Search & filter** — Full-text search on title/description, filter by status, priority, severity, assignee
+- **Search & filter** — Case-insensitive substring search on title/description, filter by status, priority, severity, assignee
 - **Pagination** — Page/limit based with total count metadata
 - **Export** — Download tickets as CSV or JSON with active filters applied
 - **Ticket stats** — Count of tickets per status for dashboard indicators
@@ -258,15 +258,13 @@ All query parameters are optional:
 | ----------- | ------- | ---------------------------------------------------------- |
 | `page`      | integer | Page number (default: 1)                                   |
 | `limit`     | integer | Results per page, max 100 (default: 20)                    |
-| `search`    | string  | Full-text search on title and description                  |
+| `search`    | string  | Case-insensitive substring search on title and description |
 | `status`    | string  | Filter: `open`, `in_progress`, `resolved`                  |
 | `priority`  | string  | Filter: `low`, `medium`, `high`, `critical`                |
 | `severity`  | string  | Filter: `low`, `medium`, `high`, `critical`                |
 | `assignee`  | string  | Filter by assignee's MongoDB ObjectId                      |
 | `sortBy`    | string  | `ticketId` (default), `priority`, `createdAt`, `updatedAt` |
 | `sortOrder` | string  | `asc` (default) or `desc`                                  |
-
-> **Performance tip:** Debounce the `search` parameter on the frontend (300–500ms) to avoid unnecessary API calls during typing.
 
 Example: `GET /api/v1/spaces/64abc.../tickets?status=open&priority=high&sortBy=priority&sortOrder=desc&page=1&limit=20`
 
