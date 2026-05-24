@@ -29,10 +29,9 @@ const buildFilterQuery = (spaceId, queryParams) => {
   if (severity) query.severity = severity;
   if (assignee) query.assignee = new mongoose.Types.ObjectId(assignee);
 
-  // MongoDB text search — uses the text index on title + description.
-  // Debounce calls on the frontend (300–500ms) to avoid hammering this on every keystroke.
   if (search && search.trim()) {
-    query.$text = { $search: search.trim() };
+    const regex = new RegExp(search.trim(), "i");
+    query.$or = [{ title: regex }, { description: regex }];
   }
 
   return query;
@@ -547,6 +546,85 @@ export const deleteTicket = async (req, res) => {
     return handleError({
       res,
       metaData: RESPONSE_MESSAGES.TICKET_DELETION_FAILED,
+      error,
+    });
+  }
+};
+
+export const getKanbanBoard = async (req, res) => {
+  try {
+    const { spaceId } = req.params;
+    const { priority, severity, assignee, search } = req.query;
+
+    const spaceExists = await Space.exists({ _id: spaceId, isDeleted: false });
+    if (!spaceExists) {
+      return handleError({
+        res,
+        metaData: RESPONSE_MESSAGES.SPACE_NOT_FOUND,
+        error: new Error("Space not found or has been deleted"),
+      });
+    }
+
+    // Base filter — same logic as buildFilterQuery but without status
+    const baseFilter = {
+      space: new mongoose.Types.ObjectId(spaceId),
+      isDeleted: false,
+    };
+
+    if (priority) baseFilter.priority = priority;
+    if (severity) baseFilter.severity = severity;
+    if (assignee) baseFilter.assignee = new mongoose.Types.ObjectId(assignee);
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), "i");
+      baseFilter.$or = [{ title: regex }, { description: regex }];
+    }
+
+    // Fetch all three columns in parallel — each is covered by the
+    // compound index { space: 1, status: 1, isDeleted: 1 }
+    const populate = [
+      { path: "assignee", select: "name email" },
+      { path: "reporter", select: "name email" },
+    ];
+
+    const [openTickets, inProgressTickets, resolvedTickets] = await Promise.all(
+      [
+        Ticket.find({ ...baseFilter, status: TICKET_STATUS.OPEN })
+          .sort({ ticketNum: 1 })
+          .populate(populate)
+          .lean(),
+        Ticket.find({ ...baseFilter, status: TICKET_STATUS.IN_PROGRESS })
+          .sort({ ticketNum: 1 })
+          .populate(populate)
+          .lean(),
+        Ticket.find({ ...baseFilter, status: TICKET_STATUS.RESOLVED })
+          .sort({ ticketNum: 1 })
+          .populate(populate)
+          .lean(),
+      ],
+    );
+
+    return handleResponse({
+      res,
+      metaData: RESPONSE_MESSAGES.TICKETS_FETCH_SUCCESS,
+      data: {
+        [TICKET_STATUS.OPEN]: {
+          count: openTickets.length,
+          tickets: openTickets,
+        },
+        [TICKET_STATUS.IN_PROGRESS]: {
+          count: inProgressTickets.length,
+          tickets: inProgressTickets,
+        },
+        [TICKET_STATUS.RESOLVED]: {
+          count: resolvedTickets.length,
+          tickets: resolvedTickets,
+        },
+      },
+    });
+  } catch (error) {
+    return handleError({
+      res,
+      metaData: RESPONSE_MESSAGES.TICKETS_FETCH_FAILED,
       error,
     });
   }
