@@ -3,6 +3,7 @@ import {
   createTicket,
   deleteTicket,
   exportTickets,
+  getKanbanBoard,
   getTicketById,
   getTicketStats,
   getTickets,
@@ -14,8 +15,9 @@ import handleRequestParamValidationErrors from "../middleware/handle-validation-
 import { RESPONSE_MESSAGES } from "../constants/response-messages.js";
 import {
   createTicketValidationRules,
-  listTicketsQueryValidationRules,
   exportTicketsValidationRules,
+  kanbanQueryValidationRules,
+  listTicketsQueryValidationRules,
   updateTicketStatusValidationRules,
   updateTicketValidationRules,
 } from "../validators/ticket-validators.js";
@@ -27,6 +29,12 @@ const ticketRoutes = Router({ mergeParams: true });
 ticketRoutes.use(verifyToken);
 
 ticketRoutes.get("/stats", getTicketStats);
+ticketRoutes.get(
+  "/kanban",
+  kanbanQueryValidationRules,
+  handleRequestParamValidationErrors(RESPONSE_MESSAGES.TICKETS_FETCH_FAILED),
+  getKanbanBoard,
+);
 ticketRoutes.get(
   "/export",
   exportTicketsValidationRules,

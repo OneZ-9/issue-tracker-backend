@@ -131,3 +131,21 @@ export const exportTicketsValidationRules = [
     .isIn(["json", "csv"])
     .withMessage("format must be 'json' or 'csv'"),
 ];
+
+export const kanbanQueryValidationRules = [
+  // No status, page, limit, or sortBy — kanban always shows all statuses
+  query("priority")
+    .optional()
+    .isIn(Object.values(TICKET_PRIORITY))
+    .withMessage(
+      `Priority must be one of: ${Object.values(TICKET_PRIORITY).join(", ")}`,
+    ),
+  query("severity")
+    .optional()
+    .isIn(Object.values(TICKET_SEVERITY))
+    .withMessage(
+      `Severity must be one of: ${Object.values(TICKET_SEVERITY).join(", ")}`,
+    ),
+  query("assignee").optional().isMongoId().withMessage("Invalid assignee ID"),
+  query("search").optional().isString().withMessage("search must be a string"),
+];
