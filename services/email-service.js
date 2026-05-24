@@ -1,41 +1,37 @@
 import nodemailer from "nodemailer";
 
 class EmailService {
-  static sendEmail({
-    senderEmailAddress,
-    senderPassword,
+  static async sendEmail({
     recepientEmailAddress,
     subject,
     htmlEmailBody,
     attachments = [],
   }) {
-    return new Promise((resolve, reject) => {
-      let transporter = nodemailer.createTransport({
+    try {
+      const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: senderEmailAddress,
-          pass: senderPassword,
+          user: process.env.SENDER_EMAIL_ADDRESS,
+          pass: process.env.SENDER_EMAIL_PASSWORD,
         },
       });
 
-      let mailOptions = {
-        from: senderEmailAddress,
+      const mailOptions = {
+        from: process.env.SENDER_EMAIL_ADDRESS,
         to: recepientEmailAddress,
-        subject: subject,
+        subject,
         html: htmlEmailBody,
-        attachments: attachments,
+        attachments,
       };
 
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          reject(error);
-        } else {
-          console.log("EMAIL_SENT");
-          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-          resolve("EMAIL_SENT");
-        }
-      });
-    });
+      const info = await transporter.sendMail(mailOptions);
+
+      console.log("EMAIL_SENT:", info.messageId);
+      return "EMAIL_SENT";
+    } catch (error) {
+      console.error("EMAIL_ERROR:", error);
+      throw error;
+    }
   }
 }
 

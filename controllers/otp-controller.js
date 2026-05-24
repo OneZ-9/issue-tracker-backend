@@ -69,8 +69,6 @@ export const sendOtp = async (req, res) => {
 
     // Send OTP via email
     const otpSendingResult = await EmailService.sendEmail({
-      senderEmailAddress: SENDER_EMAIL_ADDRESS,
-      senderPassword: SENDER_EMAIL_PASSWORD,
       recepientEmailAddress: email,
       subject: "Your OTP Code",
       htmlEmailBody: `
